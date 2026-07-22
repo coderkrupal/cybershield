@@ -5,6 +5,8 @@
   "main": "backend/server.js",
   "scripts": {
     "install-all": "npm install && npm install --prefix backend && npm install --prefix frontend --legacy-peer-deps",
+    "build": "npm run install-all && npm run build --prefix frontend",
+    "start": "node backend/server.js",
     "backend": "npm start --prefix backend",
     "frontend": "npm run dev --prefix frontend",
     "dev": "concurrently \"npm run backend\" \"npm run frontend\""

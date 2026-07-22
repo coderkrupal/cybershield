@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { connectDB } from './config/db.js';
 import scanRoutes from './routes/scan.js';
 import incidentRoutes from './routes/incidents.js';
@@ -30,9 +32,16 @@ app.use('/api/scan', scanRoutes);
 app.use('/api/incidents', incidentRoutes);
 app.use('/api/tracker', trackerRoutes);
 
-// Base Route
-app.get('/', (req, res) => {
-  res.json({ message: 'CyberShield API is running successfully.' });
+// Resolve __dirname for ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Serve static assets from frontend build directory
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+// Serve frontend index.html for any other requests (client-side routing fallback)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
 // Start listening
